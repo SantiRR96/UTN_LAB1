@@ -2,6 +2,9 @@
 #include "rlutil.h"
 #include "funciones.h" 
 #include <string> 
+#include <cstdlib>
+
+
 
 using namespace std;
 
@@ -33,10 +36,19 @@ bool confirmarNombres(string player1, string player2) {
 	rlutil::locate(47,15);
 	
 	cout << "¿Confirmar nombres? (S/N): ";
-    cin >> confirm; 
+	cin >> confirm; 
 	
 	return (confirm == 'S' || confirm == 's');
 	
+}
+	
+	int tirardados (int limite){
+		
+		return (rand() % limite)+1;
+	}
+	
+	
+
 	
 	
 }
