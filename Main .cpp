@@ -58,7 +58,7 @@ int main() {
 			
 			cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
 			rlutil::locate(40,10);
-			cout << "Antes de comenzar deber registrar sus nombres:" << endl;
+			cout << "Antes de comenzar deben registrar sus nombres:" << endl;
 			
 			
 			ingresarNombres(player1, player2);
