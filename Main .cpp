@@ -69,7 +69,7 @@ int main() {
 				rlutil::cls();
 				cout << "test de que aceeda al siguiente paso " << endl;
 			} else {
-				rlutil::locate(49,14);
+				rlutil::locate(45,17);
 				cout << "Vuelve a ingresar los nombres." << endl;
 			}
 			
