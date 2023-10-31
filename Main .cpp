@@ -63,15 +63,23 @@ int main() {
 				}
 				break;
 			case 2: cout << "ESTADISTICAS" << endl; break;
-			case 3: cout << "CREDITOS" << endl; 
+			case 3: 
+				rlutil::cls();
+				rlutil::locate(50, 8);
+				cout << "CREDITOS" << endl; 
+				rlutil::locate(50, 9);
 				cout << " ------------------------------------ " << endl;
+				rlutil::locate(50, 10);
 				cout << "Laboratorio de Computación I - Grupo 64" << endl;
+				rlutil::locate(50, 11);
 				cout << "Integrantes: " << endl;
+				rlutil::locate(50, 12);
 				cout << "Legajo 27990 - Rossi, Santiago Rodrigo" << endl;
+				rlutil::locate(50, 13);
 				cout << "Legajo 27975 - Diaz, Leonardo Sebastián" << endl;	
-				
+		
 				// Faltaria agregar los numero de legajo y tambien dice "que hay que poner nombre al grupo"
-						
+		
 				break;
 		
 			default: break;
