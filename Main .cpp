@@ -103,6 +103,7 @@ int main() {
 			case 1: // Enter
 				switch (y) {
 				case 0: op = 1; break;
+				case 2: op = 3; break;
 				case 4: op = 0; break;
 				}
 				break;
