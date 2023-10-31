@@ -46,9 +46,3 @@ bool confirmarNombres(string player1, string player2) {
 		
 		return (rand() % limite)+1;
 	}
-	
-	
-
-	
-	
-}
