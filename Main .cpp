@@ -63,7 +63,17 @@ int main() {
 				}
 				break;
 			case 2: cout << "ESTADISTICAS" << endl; break;
-			case 3: cout << "CREDITOS" << endl; break;
+			case 3: cout << "CREDITOS" << endl; 
+				cout << " ------------------------------------ " << endl;
+				cout << "Laboratorio de Computación I - Grupo 64" << endl;
+				cout << "Integrantes: " << endl;
+				cout << "Legajo 27990 - Rossi, Santiago Rodrigo" << endl;
+				cout << "Legajo 27975 - Diaz, Leonardo Sebastián" << endl;	
+				
+				// Faltaria agregar los numero de legajo y tambien dice "que hay que poner nombre al grupo"
+						
+				break;
+		
 			default: break;
 			}
 			
