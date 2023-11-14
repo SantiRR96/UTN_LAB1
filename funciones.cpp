@@ -12,10 +12,10 @@ using namespace std;
 void ingresarNombres(string &nombre1, string &nombre2) {
 	rlutil::locate(49,12);
 	cout << "Nombre jugador N° 1: ";
-	cin >> nombre1;
+	getline(std::cin, nombre1);
 	rlutil::locate(49,13);
 	cout << "Nombre jugador N° 2: ";
-	cin >> nombre2;
+	getline(std::cin, nombre2);
 }
 
 
