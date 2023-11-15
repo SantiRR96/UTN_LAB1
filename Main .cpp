@@ -9,16 +9,18 @@ using namespace std;
 
 int main() {
 	
-	
-	
 	int op;
-	
 	int y = 0;
-	
 	string player1, player2;
+	const int tam_mazo = 20;
+	string valores[tam_mazo], palos[tam_mazo];
+	//char cartasPlayer1[5], cartasPlayer2[5];
+	//int ronda = 1; // Comenzar en la ronda 1
+	//int turnoJugador = 1; // Variable para controlar el turno del jugador
 	
+	setlocale(LC_CTYPE, "Spanish");
 	srand(time(0));
-	system("color 9f");
+	system("color 3f");
 	
 	
 	
@@ -70,7 +72,32 @@ int main() {
 			else{ 
 					rlutil::locate(45, 17);
 					
-					cout << "Vuelve a ingresar los nombres." << endl ;} break;
+					cout << "Vuelve a ingresar los nombres." << endl ;
+			}
+			//while(true){
+				
+				// Llenar los vectores con cartas aleatorias
+				for (int i = 0; i < tam_mazo; i++) {
+					string palo;
+					string valor;
+					
+					informar_carta(valor, palo);
+					
+					valores[i] = valor;
+					palos[i] = palo;
+				}
+				
+				// Barajar las cartas después de llenar el mazo
+				barajar_cartas(valores, palos, tam_mazo);
+				
+				// Mostrar las cartas barajadas
+				for (int i = 0; i < tam_mazo; i++) {
+					cout << valores[i] << " " << palos[i] << endl;
+				}
+		
+			//}
+			
+			break;
 			
 
 			case 2: 
