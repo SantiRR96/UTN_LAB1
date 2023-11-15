@@ -6,8 +6,9 @@
 // Declaración de la función
 void ingresarNombres(std::string &nombre1, std::string &nombre2);
 bool confirmarNombres(std::string player1, std::string player2);
-int tirardados (int limite);
-#endif
+void informar_carta(std::string &valor, std::string &palo);
+void barajar_cartas(std::string valores[], std::string palos[], int tamano);
+//int tirardados (int limite);
 
 /*def FUNCIONES_H
 #define FUNCIONES_H
