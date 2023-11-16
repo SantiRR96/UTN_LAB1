@@ -164,3 +164,27 @@ void informar_carta(string &valor, string &palo) {
 		}
 	}
 
+int obtener_indice_carta(const std::string &valor) {
+	if (valor == "10") {
+		return 10;
+	} else if (valor == "J") {
+		return 11;
+	} else if (valor == "Q") {
+		return 12;
+	} else if (valor == "K") {
+		return 13;
+	} else {
+		return 14;
+	}
+}
+
+
+bool cartas_en_orden(const string valores[]) {
+	const int CARTAS_POR_JUGADOR = 5;
+	for (int i = 0; i < CARTAS_POR_JUGADOR - 1; ++i) {
+		if (valores[i] > valores[i + 1]) {
+			return false; // Las cartas no están en orden
+		}
+	}
+	return true; // Las cartas están en orden
+}	
