@@ -10,7 +10,7 @@ using namespace std;
 
 int main() {
 	int op;
-	int y = 0;s
+	int y = 0;
 	string player1, player2;
 	const int tam_mazo = 20;
 	const int CARTAS_POR_JUGADOR = 5;
