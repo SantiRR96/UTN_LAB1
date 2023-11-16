@@ -188,3 +188,27 @@ bool cartas_en_orden(const string valores[]) {
 	}
 	return true; // Las cartas están en orden
 }	
+
+int contar_cartas(const string valores[], const string &carta) {
+	int contador = 0;
+	const int CARTAS_POR_JUGADOR = 5;
+	for (int i = 0; i < CARTAS_POR_JUGADOR; ++i) {
+		if (valores[i] == carta) {
+			contador++;
+		}
+	}
+	return contador;
+}
+
+int comparar_cartas(const string valores_jugador1[], const string valores_jugador2[], const string &carta) {
+	int cantidad_jugador1 = contar_cartas(valores_jugador1, carta);
+	int cantidad_jugador2 = contar_cartas(valores_jugador2, carta);
+	
+	if (cantidad_jugador1 > cantidad_jugador2) {
+		return 1; // Jugador 1 tiene más cartas de la carta especificada
+	} else if (cantidad_jugador1 < cantidad_jugador2) {
+		return -1; // Jugador 2 tiene más cartas de la carta especificada
+	} else {
+		return 0; // Ambos jugadores tienen la misma cantidad de cartas de la carta especificada
+	}
+}
