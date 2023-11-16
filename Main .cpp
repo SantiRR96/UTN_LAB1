@@ -10,10 +10,11 @@ using namespace std;
 
 int main() {
 	int op;
-	int y = 0;
+	int y = 0;s
 	string player1, player2;
 	const int tam_mazo = 20;
 	const int CARTAS_POR_JUGADOR = 5;
+	const string cartas_a_comparar[] = {"A", "K", "Q", "J", "10"};
 	string valores[tam_mazo], palos[tam_mazo];
 	// Vectores para almacenar las cartas de cada jugador
 	string valores_jugador1[CARTAS_POR_JUGADOR];
@@ -106,6 +107,20 @@ int main() {
 				cout << "\nJugador 2:\n";
 				for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
 					cout << valores_jugador2[i] << " " << palos_jugador2[i] << endl;
+				}
+				
+				// Determinar qué jugador comienza primero
+				
+				for (const string &carta : cartas_a_comparar) {
+					int resultado = comparar_cartas(valores_jugador1, valores_jugador2, carta);
+					
+					if (resultado == 1) {
+						cout << "\nJugador 1 comienza primero." << endl;
+						break;
+					} else if (resultado == -1) {
+						cout << "\nJugador 2 comienza primero." << endl;
+						break;
+					}
 				}
 			//}
 			break;
