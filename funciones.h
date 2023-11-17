@@ -22,8 +22,13 @@ int comparar_cartas(const std::string valores_jugador1[], const std::string valo
 
 int tirardados (int tam); 
 
+void mostrar_ronda(int ronda);
+
+void cambiar_ronda(int &ronda) ;
 
 
 #endif
+
+
 
 
