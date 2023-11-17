@@ -12,6 +12,7 @@ int obtener_indice_carta(const std::string &valor);
 bool cartas_en_orden(const std::string valores[]);
 int contar_cartas(const std::string valores[], const std::string &carta);
 int comparar_cartas(const std::string valores_jugador1[], const std::string valores_jugador2[], const std::string &carta);
+void dados_accion(int resultado_dado, std::string valores_propios[], std::string valores_contrario[], std::string mazo[]);
 //int tirardados (int limite);
 
 #endif
