@@ -218,4 +218,20 @@ int tirardados (int tam){
 			return 0; // Ambos jugadores tienen la misma cantidad de cartas de la carta especificada
 		}
 	}
+	
+	
+	void mostrar_ronda(int ronda) {
+		
+		
+		cout << "\tRONDA #" << ronda << endl;
+		cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+		}
+	
+	void cambiar_ronda(int &ronda) {
+		
+	
+		ronda ++;
+	}
+	
+	
 
