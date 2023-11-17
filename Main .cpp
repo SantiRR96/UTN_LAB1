@@ -36,7 +36,7 @@ int main() {
 	
 	int ronda = 1; // Comenzar en la ronda 1
 	
-	int turnoJugador = 0; // Variable para controlar el turno del jugador
+	int turnoJugador = 1; // Variable para controlar el turno del jugador
 	
 	bool jugador1Comienza = false; // Declaradas aca para que sean visibles en todo el ámbito del switch
 	
@@ -117,7 +117,7 @@ int main() {
 			
 		rlutil::cls();
 			
-			
+			mostrar_ronda(ronda);
 			// Mostrar las cartas repartidas a ambos jugadores
 			rlutil::locate(50, 3);
 			cout  << player1 << endl<< endl;
@@ -134,31 +134,103 @@ int main() {
 				cout << setw(50) << valores_jugador2[i] << " " << palos_jugador2[i] << endl;
 			}
 			
+			 
 		cout<< "------------------------------------------------------------------------------------------------------------------------";
-		
 			// Determinar qué jugador comienza primero
 			for (const string &carta : cartas_a_comparar) {
 				int resultado = comparar_cartas(valores_jugador1, valores_jugador2, carta);
 				cout <<endl<<endl<<endl;
 				if (resultado == 1) {
-					cout << " \t\t\t\t\tTURNO DE :" << player1 << endl<< endl;
+					rlutil::locate(50, 23);
+					cout << " TURNO DE :" << player1 << endl<< endl;
 					jugador1Comienza = true;
-				/*	turnoJugador=1;*/
+					
 					break;
 				} else if (resultado == -1) {
-					cout <<" \t\t\t\t\tTURNO DE :"  << player2 << endl<< endl;
+					rlutil::locate(50, 23); 
+					cout <<" TURNO DE :"  << player2 << endl;
 					jugador2Comienza = true;
-					/*turnoJugador=2;*/
+					
+					
 					break;
 				}
 			}
 		}
+		
+		do {
+			for (const string &carta : cartas_a_comparar) {
+				int resultado = comparar_cartas(valores_jugador1, valores_jugador2, carta);
+				cout <<endl<<endl<<endl;
+				if (resultado == 1) {
+					rlutil::locate(50, 23);
+					cout << " TURNO DE :" << player1 << endl<< endl;
+					jugador1Comienza = true;
+						turnoJugador=1;
+					break;
+				} else if (resultado == -1) {
+					rlutil::locate(50, 23); 
+					cout <<" TURNO DE :"  << player2 << endl;
+					jugador2Comienza = true;
+					turnoJugador=2;
+					break;
+				}
+			}
+			
+		
 		if (jugador1Comienza || jugador2Comienza) {
 			const int tam = 6;
 			int dado = tirardados(tam);
-			cout << "\t\t\t\t\tLANZAMIENTO DE DADO #" << dado << endl;
+			rlutil::locate(48,25);
+			cout << "LANZAMIENTO DE DADO #" << dado << endl;
+
+			
+		
+			 
+		
+			
+			
+			cambiar_ronda(ronda);}
+		
+		rlutil::locate(48, 3);
+		cout  << player1 << endl<< endl;
+		cout<< "------------------------------------------------------------------------------------------------------------------------";
+		for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
+			cout << setw(50)  << valores_jugador1[i] << " "  << palos_jugador1[i] << endl;
+			
 		}
+		cout <<endl<<endl<<endl;
+		cout<< "------------------------------------------------------------------------------------------------------------------------";
+		cout << "\t\t\t\t\t\t\t"<< player2 << endl<< endl;
+		
+		for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
+			cout << setw(50) << valores_jugador2[i] << " " << palos_jugador2[i] << endl;
+		}
+		
+		
+		cout<< "------------------------------------------------------------------------------------------------------------------------";
+		
+		rlutil::locate(48,27);
+		
+		cout << "presione enter para tirar dados" << endl;
+	
+		cin.ignore();
+		cin.get();
+		rlutil::cls();
+		
+		if (!cartas_en_orden(valores_jugador1) || !cartas_en_orden(valores_jugador2)) {
+			
+			mostrar_ronda(ronda);
+			cout << endl;
+		}
+		
+		
+			
+			
+			
+		} while (!cartas_en_orden(valores_jugador1) || !cartas_en_orden(valores_jugador2));
+		
 		break;
+		
 		
 		case 2: {
 			cout << "ESTADISTICAS" << endl;
