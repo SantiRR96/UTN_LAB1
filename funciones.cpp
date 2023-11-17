@@ -212,3 +212,106 @@ int comparar_cartas(const string valores_jugador1[], const string valores_jugado
 		return 0; // Ambos jugadores tienen la misma cantidad de cartas de la carta especificada
 	}
 }
+
+void dados_accion(int resultado_dado, std::string valores_propios[], std::string valores_contrario[], std::string mazo[]){
+	switch (resultado_dado) {
+	case 1:
+		// Elegir una carta propia y robar del mazo
+		// Intercambiar las dos cartas
+		// La carta robada se incorpora al corral propio y la seleccionada al mazo
+	{
+		int carta_propia;
+		std::cout << "Elige una carta de tu propio corral (1-5): ";
+		std::cin >> carta_propia;
+		
+		// Intercambiar las cartas
+		std::swap(valores_propios[carta_propia - 1], mazo[0]);
+	}
+	break;
+	case 2:
+		// Elegir una carta del corral contrario y robar del mazo
+		// Intercambiar las dos cartas
+		// La carta robada se incorpora al corral contrario y la seleccionada al mazo
+	{
+		int carta_contrario;
+		std::cout << "Elige una carta del corral contrario (1-5): ";
+		std::cin >> carta_contrario;
+	
+		// Intercambiar las cartas
+		std::swap(valores_contrario[carta_contrario - 1], mazo[0]);
+	}
+	break;
+	case 3:
+		// Elegir una carta propia e intercambiarla con una del corral contrario
+	{
+		int carta_propia, carta_contrario;
+		std::cout << "Elige una carta de tu propio corral (1-5): ";
+		std::cin >> carta_propia;
+		
+		// Validar la entrada del usuario
+		if (carta_propia < 1 || carta_propia > 5) {
+			std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
+			return;
+		}
+		
+		std::cout << "Elige una carta del corral contrario (1-5): ";
+		std::cin >> carta_contrario;
+		
+		// Validar la entrada del usuario
+		if (carta_contrario < 1 || carta_contrario > 5) {
+			std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
+			return;
+		}
+		
+		// Intercambiar las cartas
+		std::swap(valores_propios[carta_propia - 1], valores_contrario[carta_contrario - 1]);
+	}
+	break;
+	case 4:
+		// Intercambiar dos cartas propias
+		break;
+	case 5:
+		std::cout << "Acción 5: Bloquear una carta del corral.\n";
+		// Lógica para la acción 5
+		// ...
+		break;
+		
+	case 6:
+		int opcion;
+		std::cout << "Acción 6: Elegir cualquiera de las acciones anteriores o bien pasar el turno.\n";
+		std::cout << "Selecciona la acción (1-6, 0 para pasar el turno): ";
+		std::cin >> opcion;
+		
+		switch (opcion) {
+		case 1:
+			// Lógica para la acción 1
+			// ...
+			break;
+		case 2:
+			// Lógica para la acción 2
+			// ...
+			break;
+		case 3:
+			// Lógica para la acción 3
+			// ...
+			break;
+		case 4:
+			// Lógica para la acción 4
+			// ...
+			break;
+		case 5:
+			// Lógica para la acción 5
+			// ...
+			break;
+		default:
+			std::cout << "Turno pasado.\n";
+			break;
+		}
+		
+		break;
+		
+	default:
+		std::cout << "Resultado del dado inválido.\n";
+		break;
+	}
+}
