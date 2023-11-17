@@ -4,11 +4,15 @@
 #include <string>
 
 // Declaración de la función
+void juego();
+
+void creditos();
+
 void ingresarNombres(std::string &nombre1, std::string &nombre2);
 
 bool confirmarNombres(std::string player1, std::string player2);
 
-void informar_carta(std::string &valor,  char &palo);
+void informar_carta(std::string &valor,  std::string &palo);
 
 void barajar_cartas(std::string valores[], std::string palos[], int tamano);
 
@@ -24,11 +28,16 @@ int tirardados (int tam);
 
 void mostrar_ronda(int ronda);
 
-void cambiar_ronda(int &ronda) ;
+void cambiar_ronda(int &ronda);
 
+void accion_dado(int dado, int turnoJugador, std::string valores[], std::string palos[], std::string valores_jugador1[], std::string valores_jugador2[], std::string palos_jugador1[], std::string palos_jugador2[]);
+
+/*void cambiar_jugador();*/
 
 #endif
 
+/*def FUNCIONES_H
+#define FUNCIONES_H
 
 
 
