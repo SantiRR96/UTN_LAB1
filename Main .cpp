@@ -4,35 +4,46 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
-
+#include <iomanip>
 
 using namespace std;
 
 int main() {
-	int op;
+	
+	int op = 0;
+	
 	int y = 0;
+	
 	string player1, player2;
+	
 	const int tam_mazo = 20;
+	
 	const int CARTAS_POR_JUGADOR = 5;
+	
 	const string cartas_a_comparar[] = {"A", "K", "Q", "J", "10"};
+	
 	string valores[tam_mazo], palos[tam_mazo];
-	int resultado_dado = lanzar_dado();
 	// Vectores para almacenar las cartas de cada jugador
 	string valores_jugador1[CARTAS_POR_JUGADOR];
+	
 	string palos_jugador1[CARTAS_POR_JUGADOR];
+	
 	string valores_jugador2[CARTAS_POR_JUGADOR];
+	
 	string palos_jugador2[CARTAS_POR_JUGADOR];
-	std::string corral_jugador1[CARTAS_POR_JUGADOR];
-	std::string corral_jugador2[CARTAS_POR_JUGADOR];
 	
 	//char cartasPlayer1[5], cartasPlayer2[5];
-	int ronda = 1; // Comenzar en la ronda 1
-	int turnoJugador = 1; // Variable para controlar el turno del jugador
 	
-	setlocale(LC_CTYPE, "Spanish");
+	int ronda = 1; // Comenzar en la ronda 1
+	
+	int turnoJugador = 0; // Variable para controlar el turno del jugador
+	
+	bool jugador1Comienza = false; // Declaradas aca para que sean visibles en todo el ámbito del switch
+	
+	bool jugador2Comienza = false;
+	
 	srand(time(0));
 	system("color 3f");
-	
 	
 	do {
 		rlutil::hidecursor();
@@ -56,7 +67,10 @@ int main() {
 		cout << (char)175 << endl;
 		
 		switch (op) {
-		case 1:
+		case 1: {
+			
+			setlocale(LC_ALL, "spanish");
+			
 			rlutil::cls();
 			rlutil::locate(50, 8);
 			cout << "CLUTCH" << endl;
@@ -67,79 +81,94 @@ int main() {
 			if (confirmarNombres(player1, player2)) {
 				rlutil::locate(50, 18);
 				cout << "Nombres confirmados." << endl;
-		    }
-			else { 
+			} else {
 				rlutil::locate(45, 17);
 				cout << "Vuelve a ingresar los nombres." << endl << endl;
 			}
 			
 			//while(true){
-				
-				// Llenar los vectores con cartas aleatorias para ambos jugadores
-				for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
-					string palo;
-					string valor;
-				
-					// Cartas para el jugador 1
-					informar_carta(valor, palo);
-					valores_jugador1[i] = valor;
-					palos_jugador1[i] = palo;
-				
-					// Cartas para el jugador 2
-					informar_carta(valor, palo);
-					valores_jugador2[i] = valor;
-					palos_jugador2[i] = palo;
-				}
 			
-				// Verificar si las cartas están en orden y baraja nuevamente si es necesario
-				if (cartas_en_orden(valores_jugador1)) {
-					cout << "Las cartas del Jugador 1 salieron ordenadas. Barajar nuevamente...\n";
-					barajar_cartas(valores_jugador1, palos_jugador1, CARTAS_POR_JUGADOR);
-				}
+			// Llenar los vectores con cartas aleatorias para ambos jugadores
+			for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
+				char palo;
+				string valor;
 				
-				if (cartas_en_orden(valores_jugador2)) {
-					cout << "Las cartas del Jugador 2 salieron ordenadas. Barajar nuevamente...\n";
-					barajar_cartas(valores_jugador2, palos_jugador2, CARTAS_POR_JUGADOR);
-				}
+				// Cartas para el jugador 1
+				informar_carta(valor, palo);
+				valores_jugador1[i] = valor;
+				palos_jugador1[i] = palo;
 				
-				// Mostrar las cartas repartidas a ambos jugadores
-				cout << "Jugador 1:\n";
-				for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
-					cout << valores_jugador1[i] << " " << palos_jugador1[i] << endl;
-				}
+				// Cartas para el jugador 2
+				informar_carta(valor, palo);
+				valores_jugador2[i] = valor;
+				palos_jugador2[i] = palo;
+			}
 			
-				cout << "\nJugador 2:\n";
-				for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
-					cout << valores_jugador2[i] << " " << palos_jugador2[i] << endl;
-				}
-				
-				// Determinar qué jugador comienza primero
-				
-				for (const string &carta : cartas_a_comparar) {
-					int resultado = comparar_cartas(valores_jugador1, valores_jugador2, carta);
-					
-					if (resultado == 1) {
-						cout << "\nJugador 1 comienza primero." << endl;
-						break;
-					} else if (resultado == -1) {
-						cout << "\nJugador 2 comienza primero." << endl;
-						break;
-					}
-				}
-				cout << endl;
-				// Indicar al jugador que comienza que puede tirar el dado
-				cout << "Comienza lanzando el dado..." << endl << "El resultado es: " << resultado_dado << endl;
-				
-				// Realizar la acción correspondiente al resultado del dado
-				dados_accion(resultado_dado, valores_jugador1, corral_jugador1, corral_jugador2);
+			// Verificar si las cartas están en orden y barajar nuevamente si es necesario
+			if (cartas_en_orden(valores_jugador1)) {
+				cout << "Las cartas del Jugador 1 salieron ordenadas. Barajar nuevamente...\n";
+				barajar_cartas(valores_jugador1, palos_jugador1, CARTAS_POR_JUGADOR);
+			}
 			
-		//}
+			if (cartas_en_orden(valores_jugador2)) {
+				cout << "Las cartas del Jugador 2 salieron ordenadas. Barajar nuevamente...\n";
+				barajar_cartas(valores_jugador2, palos_jugador2, CARTAS_POR_JUGADOR);
+			}
+			
+		rlutil::cls();
+			
+			
+			// Mostrar las cartas repartidas a ambos jugadores
+			rlutil::locate(50, 3);
+			cout  << player1 << endl<< endl;
+			cout<< "------------------------------------------------------------------------------------------------------------------------";
+			for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
+				cout << setw(50)  << valores_jugador1[i] << " "  << palos_jugador1[i] << endl;
+				
+			}
+			cout <<endl<<endl<<endl;
+			cout<< "------------------------------------------------------------------------------------------------------------------------";
+			cout << "\t\t\t\t\t\t\t"<< player2 << endl<< endl;
+			
+			for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
+				cout << setw(50) << valores_jugador2[i] << " " << palos_jugador2[i] << endl;
+			}
+			
+		cout<< "------------------------------------------------------------------------------------------------------------------------";
+		
+			// Determinar qué jugador comienza primero
+			for (const string &carta : cartas_a_comparar) {
+				int resultado = comparar_cartas(valores_jugador1, valores_jugador2, carta);
+				cout <<endl<<endl<<endl;
+				if (resultado == 1) {
+					cout << " \t\t\t\t\tTURNO DE :" << player1 << endl<< endl;
+					jugador1Comienza = true;
+				/*	turnoJugador=1;*/
+					break;
+				} else if (resultado == -1) {
+					cout <<" \t\t\t\t\tTURNO DE :"  << player2 << endl<< endl;
+					jugador2Comienza = true;
+					/*turnoJugador=2;*/
+					break;
+				}
+			}
+		}
+		if (jugador1Comienza || jugador2Comienza) {
+			const int tam = 6;
+			int dado = tirardados(tam);
+			cout << "\t\t\t\t\tLANZAMIENTO DE DADO #" << dado << endl;
+		}
+		break;
+		
+		case 2: {
+			cout << "ESTADISTICAS" << endl;
 			break;
-		case 2: cout << "ESTADISTICAS" << endl; break;
-		case 3: 
+		}
+		
+		case 3: {
 			rlutil::cls();
 			rlutil::locate(50, 8);
-			cout << "CREDITOS" << endl; 
+			cout << "CREDITOS" << endl;
 			rlutil::locate(50, 9);
 			cout << " ------------------------------------ " << endl;
 			rlutil::locate(50, 10);
@@ -150,10 +179,13 @@ int main() {
 			cout << "Legajo 27990 - Rossi, Santiago Rodrigo" << endl;
 			rlutil::locate(50, 14);
 			cout << "Legajo 27975 - Diaz, Leonardo Sebastián" << endl;
+			
+			break;
+		}
 		
-		break;
-		
-		default: break;
+		default: {
+			break;
+		}
 		}
 		
 		int key = rlutil::getkey();
@@ -173,14 +205,23 @@ int main() {
 			break;
 		case 1: // Enter
 			switch (y) {
-			case 0: op = 1; break;
-			case 2: op = 3; break; 
-			case 4: op = 0; break;
+			case 0:
+				op = 1;
+				break;
+			case 2:
+				op = 3;
+				break;
+			case 4:
+				op = 0;
+				break;
 			}
 			break;
-		default: break;
+		default:
+			break;
 		}
 	} while (op != 0);
 	
 	return 0;
 }
+
+			
