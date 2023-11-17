@@ -16,11 +16,15 @@ int main() {
 	const int CARTAS_POR_JUGADOR = 5;
 	const string cartas_a_comparar[] = {"A", "K", "Q", "J", "10"};
 	string valores[tam_mazo], palos[tam_mazo];
+	int resultado_dado = lanzar_dado();
 	// Vectores para almacenar las cartas de cada jugador
 	string valores_jugador1[CARTAS_POR_JUGADOR];
 	string palos_jugador1[CARTAS_POR_JUGADOR];
 	string valores_jugador2[CARTAS_POR_JUGADOR];
 	string palos_jugador2[CARTAS_POR_JUGADOR];
+	std::string corral_jugador1[CARTAS_POR_JUGADOR];
+	std::string corral_jugador2[CARTAS_POR_JUGADOR];
+	
 	//char cartasPlayer1[5], cartasPlayer2[5];
 	int ronda = 1; // Comenzar en la ronda 1
 	int turnoJugador = 1; // Variable para controlar el turno del jugador
@@ -122,7 +126,14 @@ int main() {
 						break;
 					}
 				}
-			//}
+				cout << endl;
+				// Indicar al jugador que comienza que puede tirar el dado
+				cout << "Comienza lanzando el dado..." << endl << "El resultado es: " << resultado_dado << endl;
+				
+				// Realizar la acción correspondiente al resultado del dado
+				dados_accion(resultado_dado, valores_jugador1, corral_jugador1, corral_jugador2);
+			
+		//}
 			break;
 		case 2: cout << "ESTADISTICAS" << endl; break;
 		case 3: 
