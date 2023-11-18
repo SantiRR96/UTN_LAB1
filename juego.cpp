@@ -62,7 +62,6 @@ void juego(){
 		cout << "Vuelve a ingresar los nombres." << endl << endl;
 	}
 	
-	//while(true){
 	
 	// Llenar los vectores con cartas aleatorias para ambos jugadores
 	for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
@@ -91,9 +90,7 @@ void juego(){
 		barajar_cartas(valores_jugador2, palos_jugador2, CARTAS_POR_JUGADOR);
 	}
 	
-	rlutil::cls();
 	
-	mostrar_ronda(ronda);
 	
 	for (const string &carta : cartas_a_comparar) {
 		int resultado = comparar_cartas(valores_jugador1, valores_jugador2, carta);
@@ -115,6 +112,9 @@ void juego(){
 
 	
 	do {
+		rlutil::cls();
+		
+		mostrar_ronda(ronda);
 		
 		// Establecer el turno del jugador al comienzo de cada ronda
 		if (ronda % 2 == 1) {
@@ -158,7 +158,7 @@ void juego(){
 		
 		rlutil::locate(48,27);
 		
-		cout << "presione enter para tirar dados" << endl;
+		cout << " Presione enter para tirar dados " << endl;
 		
 		cin.ignore();
 		cin.get();
@@ -185,6 +185,9 @@ void juego(){
 //Opcion 2 - Estadisticas
 	
 void estadisticas(){
+	
+	int puntos_partida = 0, puntos_robo = 0, puntos_Malubicadas = 0, puntos_Sinturno = 0, puntos_Sinrobo = 0;
+	
 	rlutil::cls();
 	rlutil::locate(45, 8);
 	cout << "ESTADISTICAS" << endl; 
@@ -198,14 +201,24 @@ void estadisticas(){
 	cout << "---------------------------------------------------------------------- " << endl;
 	rlutil::locate(45, 12);
 	cout << "Ganar la partida" << endl;
+	rlutil::locate(100, 12);
+	cout << puntos_partida << "puntos." << endl;
 	rlutil::locate(45, 13);
 	cout << "Robo última carta al jugador rival" << endl;
+	rlutil::locate(100, 13);
+	cout << puntos_robo << "puntos." << endl;
 	rlutil::locate(45, 14);
 	cout << "Cartas mal ubicadas del rival x 4" << endl;
+	rlutil::locate(100, 14);
+	cout << puntos_Malubicadas << "puntos." << endl;
 	rlutil::locate(45, 15);
 	cout << "Sin pasar de turno" << endl;
+	rlutil::locate(100, 15);
+	cout << puntos_Sinturno << "puntos." << endl;
 	rlutil::locate(45, 16);
 	cout << "Sin haber sufrido un robo del rival " << endl;
+	rlutil::locate(100, 16);
+	cout << puntos_Sinrobo << "puntos." << endl;
 	rlutil::locate(45, 17);
 	cout << "---------------------------------------------------------------------- " << endl;
 	rlutil::locate(45, 18);
