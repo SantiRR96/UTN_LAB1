@@ -44,7 +44,7 @@ int main() {
 			break;
 		
 		case 2:
-			//estadisticas();
+			estadisticas();
 		break;
 		
 		case 3: 
@@ -71,9 +71,10 @@ int main() {
 			break;
 		case 1: // Enter
 			switch (y) {
-			case 0: op = 1; break;
-			case 2: op = 3; break; 
-			case 4: op = 0; break;
+			case 0: op = 1; break; //Opcion 1 - Jugar
+			case 1: op = 2; break; //Opcion 2 - Estadisticas
+			case 2: op = 3; break; //Opcion 3 - Creditos
+			case 4: op = 0; break; //Opcion 0 - Salir
 			}
 			break;
 		default: break;
