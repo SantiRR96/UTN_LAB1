@@ -42,6 +42,8 @@ void juego(){
 	
 	bool jugador2Comienza = false;
 	
+	
+	
 	srand(time(0));
 	system("color 3f");
 	
@@ -92,28 +94,39 @@ void juego(){
 	rlutil::cls();
 	
 	mostrar_ronda(ronda);
+	
+	for (const string &carta : cartas_a_comparar) {
+		int resultado = comparar_cartas(valores_jugador1, valores_jugador2, carta);
+		cout <<endl<<endl<<endl;
+		if (resultado == 1) {
+			rlutil::locate(50, 23);
+			cout << " Comienza :" << player1 << endl<< endl;
+			jugador1Comienza = true;
+			turnoJugador = 1;
+			break;
+		} else if (resultado == -1) {
+			rlutil::locate(50, 23); 
+			cout <<" Comienza :"  << player2 << endl;
+			jugador2Comienza = true;
+			turnoJugador = 2;
+			break;
+		}
+	}
 
 	
 	do {
-		for (const string &carta : cartas_a_comparar) {
-			int resultado = comparar_cartas(valores_jugador1, valores_jugador2, carta);
-			cout <<endl<<endl<<endl;
-			if (resultado == 1) {
-				rlutil::locate(50, 23);
-				cout << " TURNO DE :" << player1 << endl<< endl;
-				jugador1Comienza = true;
-				turnoJugador = 1;
-				break;
-			} else if (resultado == -1) {
-				rlutil::locate(50, 23); 
-				cout <<" TURNO DE :"  << player2 << endl;
-				jugador2Comienza = true;
-				turnoJugador = 2;
-				break;
-			}
+		
+		// Establecer el turno del jugador al comienzo de cada ronda
+		if (ronda % 2 == 1) {
+			turnoJugador = 1;
+			rlutil::locate(50, 23); 
+			cout <<" TURNO DE :"  << player1 << endl;
+		} else {
+			turnoJugador = 2;
+			rlutil::locate(50, 23); 
+			cout <<" TURNO DE :"  << player2 << endl;
 		}
-		
-		
+				
 		rlutil::locate(48, 3);
 		cout  << player1 << endl<< endl;
 		cout<< "------------------------------------------------------------------------------------------------------------------------";
@@ -135,13 +148,13 @@ void juego(){
 			int dado = tirardados(tam);
 			rlutil::locate(48,25);
 			cout << "LANZAMIENTO DE DADO #" << dado << endl;
+			cout << endl;
 			cambiar_ronda(ronda);
 			accion_dado(dado, turnoJugador, valores, palos, valores_jugador1, valores_jugador2, palos_jugador1, palos_jugador2);
-			cout << endl;
 		}
 		
 		
-		cout<< "------------------------------------------------------------------------------------------------------------------------";
+		cout<< "------------------------------------------------------------------------------------------------------------------------" << endl;
 		
 		rlutil::locate(48,27);
 		
@@ -159,25 +172,63 @@ void juego(){
 		
 		
 	} while (!cartas_en_orden(valores_jugador1) || !cartas_en_orden(valores_jugador2));
-}	
-//}
+
+	int resultado_final = comparar_cartas(valores_jugador1, valores_jugador2, cartas_a_comparar[0]);
+	
+	if (resultado_final == 1) {
+		cout << "¡El jugador " << player1 << " gana la partida!" << endl;
+	} else {
+		cout << "¡El jugador " << player2 << " gana la partida!" << endl;
+	}
+}
+
+//Opcion 2 - Estadisticas
+	
+void estadisticas(){
+	rlutil::cls();
+	rlutil::locate(45, 8);
+	cout << "ESTADISTICAS" << endl; 
+	rlutil::locate(45, 9);
+	cout << "---------------------------------------------------------------------- " << endl;
+	rlutil::locate(45, 10);
+	cout << "DETALLE" << endl;
+	rlutil::locate(100, 10);
+	cout << "PUNTOS" << endl; 
+	rlutil::locate(45, 11);
+	cout << "---------------------------------------------------------------------- " << endl;
+	rlutil::locate(45, 12);
+	cout << "Ganar la partida" << endl;
+	rlutil::locate(45, 13);
+	cout << "Robo última carta al jugador rival" << endl;
+	rlutil::locate(45, 14);
+	cout << "Cartas mal ubicadas del rival x 4" << endl;
+	rlutil::locate(45, 15);
+	cout << "Sin pasar de turno" << endl;
+	rlutil::locate(45, 16);
+	cout << "Sin haber sufrido un robo del rival " << endl;
+	rlutil::locate(45, 17);
+	cout << "---------------------------------------------------------------------- " << endl;
+	rlutil::locate(45, 18);
+	cout << "TOTAL" << endl;
+
+}
 
 // Opcion 3 - CREDITOS	
 void creditos(){
 	
 	rlutil::cls();
-	rlutil::locate(50, 8);
+	rlutil::locate(45, 8);
 	cout << "CREDITOS" << endl; 
-	rlutil::locate(50, 9);
+	rlutil::locate(45, 9);
 	cout << " ------------------------------------ " << endl;
-	rlutil::locate(50, 10);
+	rlutil::locate(45, 10);
 	cout << "Laboratorio de Computación I - Grupo 64" << endl;
-	rlutil::locate(50, 11);
+	rlutil::locate(45, 11);
 	cout << "Integrantes: " << endl;
-	rlutil::locate(50, 13);
+	rlutil::locate(45, 13);
 	cout << "Legajo 27990 - Rossi, Santiago Rodrigo" << endl;
-	rlutil::locate(50, 14);
+	rlutil::locate(45, 14);
 	cout << "Legajo 27975 - Diaz, Leonardo Sebastián" << endl;
-	rlutil::locate(50, 15);
+	rlutil::locate(45, 15);
 	cout << "Legajo 27982 - Aguirregabiria, Martin Alejandro" << endl;
 }
