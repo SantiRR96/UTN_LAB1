@@ -1,10 +1,10 @@
-//#include <iostream>
+#include <iostream>
 #include "rlutil.h"
 #include "funciones.h" 
 #include <string> 
 #include <cstdlib>
-// #include <ctime>
-
+#include <ctime>
+#include <algorithm> 
 
 using namespace std;
 
@@ -49,7 +49,7 @@ int tirardados (int limite){
 	
 	/// Aca hago el mazo de cartas y reparte 
 	
-	void informar_carta(string &valor, string &palo) {
+void informar_carta(string &valor, string &palo) {
 		const int total_cartas = 20;
 		static int cartas_restantes = total_cartas;
 		static bool numeros_generados[total_cartas] = {false};
@@ -225,222 +225,397 @@ void cambiar_ronda(int &ronda) {
 	ronda ++;
 }
 
+
+void restar_cartas_mazo(std::string valores[], std::string palos[], int tam, const std::string valores_jugador[], const std::string palos_jugador[]) {
+	// Creo un nuevo mazo que contenga todas las cartas
+	string mazo_valores[tam];
+	string mazo_palos[tam];
+	int CARTAS_POR_JUGADOR = 5;
+	
+	for (int i = 0; i < tam; i++) {
+		mazo_valores[i] = valores[i];
+		mazo_palos[i] = palos[i];
+	}
+	
+	// Remover las cartas que se han dado a los jugadores del nuevo mazo
+	for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
+		// Encontrar la posición de la carta en el nuevo mazo
+		auto it = std::find(mazo_valores, mazo_valores + tam, valores_jugador[i]);
+		
+		// Eliminar la carta del nuevo mazo
+		if (it != mazo_valores + tam) {
+			int index = std::distance(mazo_valores, it);
+			mazo_valores[index] = "";
+			mazo_palos[index] = "";
+		}
+	}
+	
+	// Actualizar el mazo original con las cartas restantes
+	int indice = 0;
+	for (int i = 0; i < tam; i++) {
+		if (mazo_valores[i] != "") {
+			valores[indice] = mazo_valores[i];
+			palos[indice] = mazo_palos[i];
+			indice++;
+		}
+	}
+}
+
+
+
 //Acciones del dado
 
 void accion_dado(int dado, int turnoJugador, std::string valores[], std::string palos[], std::string valores_jugador1[], std::string valores_jugador2[], std::string palos_jugador1[], std::string palos_jugador2[]) {
-	int A,B;
-	int carta_propia, carta_contrario;
+	int carta_propia, carta_contrario, carta_propia2, opcion;
 	std::string valores_propios;
 	std::string valores_contrario;
-	std::string AP,AV;
+	const int tam_mazo = 20;
 	
-	if (turnoJugador==1){
+	if (turnoJugador == 1){
 		switch (dado) {
 		case 1:
-			std::cout << "A continuacion elige una carta de tu propio corral (1-5), esta carta se intercambiara con una del mazo." << std::endl;
-			std::cin >> A;
-			// Validar la entrada del usuario
-			//if (A < 1 || A > 5) {
-			//	std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
-			//	return;
-			//}
-			AV = valores_jugador1[A + 1];
-			AP = palos_jugador1[A + 1];
-			valores_jugador1[A + 1] = valores[0];
-			palos_jugador1[A + 1] = palos[0];
-			valores[0] = AV;
-			palos[0] = AP;
+			
+			restar_cartas_mazo(valores, palos, tam_mazo, valores_jugador1, palos_jugador1);
+			restar_cartas_mazo(valores, palos, tam_mazo, valores_jugador2, palos_jugador2);
+			cout << "A continuacion elige una carta de tu propio corral (1-5), esta carta se intercambiara con una del mazo." << endl << endl;
+			cin >> carta_propia;
+			
+			if(turnoJugador == 1){
+			swap(valores_jugador1[carta_propia - 1], valores[carta_propia - 1]);
+			swap(palos_jugador1[carta_propia - 1], palos[carta_propia - 1]);
+			}
+//			AV = valores_jugador1[A + 1];
+//			AP = palos_jugador1[A + 1];
+//			valores_jugador1[A + 1] = valores[0];
+//			palos_jugador1[A + 1] = palos[0];
+//			valores[0] = AV;
+//			palos[0] = AP;
 			break;
 			
 			
 			case 2: {
+				restar_cartas_mazo(valores, palos, tam_mazo, valores_jugador1, palos_jugador1);
+				restar_cartas_mazo(valores, palos, tam_mazo, valores_jugador2, palos_jugador2);
 				std::cout << "A continuacion elige una carta del corral contrario (1-5), esta carta se intercambiara con una del mazo." << std::endl;
-				std::cin >> A;
+				std::cin >> carta_contrario;
 				
-				// Validar la entrada del usuario
-//				if (A < 1 || A > 5) {
-//					std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
-//					return;
-//				}
-				
-				AV = valores_jugador2[A + 1];
-				AP = palos_jugador2[A + 1];
-				valores_jugador2[A] = valores[1];
-				palos_jugador2[A] = palos[1];
-				valores[1] = AV;
-				palos[1] = AP;
+				if(turnoJugador == 1){
+				swap(valores_jugador2[carta_contrario - 1], valores[carta_contrario - 1]);
+				swap(palos_jugador2[carta_contrario - 1], palos[carta_contrario - 1]);
+				}
+//				AV = valores_jugador2[A + 1];
+//				AP = palos_jugador2[A + 1];
+//				valores_jugador2[A] = valores[1];
+//				palos_jugador2[A] = palos[1];
+//				valores[1] = AV;
+//				palos[1] = AP;
 				break;
 			}
 			case 3: {
-				// Elegir una carta propia e intercambiarla con una del corral contrario
+				cout << "Elegir una carta propia e intercambiarla con una del corral contrario" << endl;
 				{
-				int carta_propia, carta_contrario;
 				std::cout << "Elige una carta de tu propio corral (1-5): ";
 				std::cin >> carta_propia;
-				
-				// Validar la entrada del usuario
-				if (carta_propia < 1 || carta_propia > 5) {
-					std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
-					return;
-				}
 				
 				std::cout << "Elige una carta del corral contrario (1-5): ";
 				std::cin >> carta_contrario;
 				
-				// Validar la entrada del usuario
-				if (carta_contrario < 1 || carta_contrario > 5) {
-					std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
-					return;
-				}
-				
 				// Intercambiar las cartas
-				std::swap(valores_propios[carta_propia - 1], valores_contrario[carta_contrario - 1]);
+				if(turnoJugador == 1){
+					swap(valores_jugador1[carta_propia - 1], valores_jugador2[carta_contrario - 1]);
+					swap(palos_jugador1[carta_propia - 1], palos_jugador2[carta_contrario - 1]);
+				}
+				else{
+					swap(valores_jugador2[carta_propia - 1], valores_jugador1[carta_contrario - 1]);
+					swap(palos_jugador2[carta_propia - 1], palos_jugador1[carta_contrario - 1]);
+				}
+			
 			}
 			break;
 			}
 			case 4: {
-				std::cout << "A continuacion elige una carta de tu propio corral (1-5), acto seguido elige otra carta de tu propio corral (1-5) y estas se intercambiaran." << std::endl;
-				std::cin >> A;
+				cout << "A continuacion elige una carta de tu propio corral (1-5), acto seguido elige otra carta de tu propio corral (1-5) y estas se intercambiaran." << endl;
+				cout << "Ingrese la primer carta: ";
+					cin >> carta_propia;
+					cout << endl;
+				cout << "Ingrese la segunda carta: ";
+					cin >> carta_propia2;
+					cout << endl;
 				// Validar la entrada del usuario
-				if (A < 1 || A > 5) {
-					std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
-					return;
-				}
-				std::cin >> B;
-				// Validar la entrada del usuario
-				if (B < 1 || B > 5) {
-					std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
-					return;
-				}
-				AV = valores_jugador1[A];
-				AP = palos_jugador1[A];
-				valores_jugador1[A] = valores_jugador1[B];
-				palos_jugador1[A] = palos_jugador1[B];
-				valores_jugador1[B] = AV;
-				palos_jugador1[B] = AP;
+				swap(valores_jugador1[carta_propia - 1], valores_jugador1[carta_propia2 - 1]);
+				swap(palos_jugador1[carta_propia - 1], palos_jugador1[carta_propia2 - 1]);	
+				
 				break;
 			}
 			case 5: {
-				printf("A continuacion elige una carta de tu corral, esta carta estara BLOQUEADA y no puede ser elegida por el contrario para intercambiar pero si por ti mismo");
+				cout << "A continuacion elige una carta de tu corral" << endl;
+				cin >> carta_propia;
+				cout << "Esta carta estara BLOQUEADA y no puede ser elegida por el contrario para intercambiar pero si por ti mismo" << endl;
 				break;
 			}
 			case 6: {
-				printf("Puedes elegir cualquier accion anterior o pasar turno");
-				break;
-				// MODIFICAR EL 6 CON OTRO SWITCH INSERTANDO LOS 5 ANTERIORES Y OTRA OPCION PARA SALTEAR
+				cout << "Puedes elegir cualquier accion anterior o pasar turno con el 6" << endl;
+				cin >> opcion;
+				switch (opcion) {
+				case 1:
+					cout << "A continuacion elige una carta de tu propio corral (1-5), esta carta se intercambiara con una del mazo." << endl << endl;
+					cin >> carta_propia;
+					
+					if(turnoJugador == 1){
+						swap(valores_jugador1[carta_propia - 1], valores[1]);
+						swap(palos_jugador1[carta_propia - 1], palos[1]);
+					}
+					//			AV = valores_jugador1[A + 1];
+					//			AP = palos_jugador1[A + 1];
+					//			valores_jugador1[A + 1] = valores[0];
+					//			palos_jugador1[A + 1] = palos[0];
+					//			valores[0] = AV;
+					//			palos[0] = AP;
+					break;
+					
+					
+				case 2: {
+					std::cout << "A continuacion elige una carta del corral contrario (1-5), esta carta se intercambiara con una del mazo." << std::endl;
+					std::cin >> carta_contrario;
+					
+					if(turnoJugador == 1){
+						swap(valores_jugador2[carta_contrario - 1], valores[1]);
+						swap(palos_jugador2[carta_contrario - 1], palos[1]);
+					}
+					//				AV = valores_jugador2[A + 1];
+					//				AP = palos_jugador2[A + 1];
+					//				valores_jugador2[A] = valores[1];
+					//				palos_jugador2[A] = palos[1];
+					//				valores[1] = AV;
+					//				palos[1] = AP;
+					break;
+				}
+				case 3: {
+					cout << "Elegir una carta propia e intercambiarla con una del corral contrario" << endl;
+					{
+						std::cout << "Elige una carta de tu propio corral (1-5): ";
+						std::cin >> carta_propia;
+						
+						std::cout << "Elige una carta del corral contrario (1-5): ";
+						std::cin >> carta_contrario;
+						
+						// Intercambiar las cartas
+						if(turnoJugador == 1){
+							swap(valores_jugador1[carta_propia - 1], valores_jugador2[carta_contrario - 1]);
+							swap(palos_jugador1[carta_propia - 1], palos_jugador2[carta_contrario - 1]);
+						}
+						else{
+							swap(valores_jugador2[carta_propia - 1], valores_jugador1[carta_contrario - 1]);
+							swap(palos_jugador2[carta_propia - 1], palos_jugador1[carta_contrario - 1]);
+						}
+						
+					}
+					break;
+				}
+				case 4: {
+					cout << "A continuacion elige una carta de tu propio corral (1-5), acto seguido elige otra carta de tu propio corral (1-5) y estas se intercambiaran." << endl;
+					cout << "Ingrese la primer carta: ";
+					cin >> carta_propia;
+					cout << endl;
+					cout << "Ingrese la segunda carta: ";
+					cin >> carta_propia2;
+					cout << endl;
+					// Validar la entrada del usuario
+					swap(valores_jugador1[carta_propia - 1], valores_jugador1[carta_propia2 - 1]);
+					swap(palos_jugador1[carta_propia - 1], palos_jugador1[carta_propia2 - 1]);	
+					
+					break;
+				}
+				case 5: {
+					cout << "A continuacion elige una carta de tu corral" << endl;
+					cin >> carta_propia;
+					cout << "Esta carta estara BLOQUEADA y no puede ser elegida por el contrario para intercambiar pero si por ti mismo" << endl;
+					break;
+				}
+				
+				case 6:
+					// Salir del bucle si elige pasar turno
+					std::cout << "Pasando turno..." << std::endl;
+					break;
+					break;
+				}
 			}
 		}
 	}
 	else{
 		switch (dado) {
 		case 1: {
+			restar_cartas_mazo(valores, palos, tam_mazo, valores_jugador1, palos_jugador1);
+			restar_cartas_mazo(valores, palos, tam_mazo, valores_jugador2, palos_jugador2);
 			std::cout << "A continuacion elige una carta de tu propio corral (1-5), esta carta se intercambiara con una del mazo." << std::endl;
-			cin >> A;
-			// Validar la entrada del usuario
-			if (A < 1 || A > 5) {
-				std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
-				return;
+			std::cin >> carta_propia;
+			
+			if(turnoJugador == 2){
+			swap(valores_jugador2[carta_propia - 1], valores[carta_propia - 1]);
+			swap(palos_jugador2[carta_propia - 1], palos[carta_propia - 1]);
 			}
-			std::string AV = valores_jugador2[A];
-			std::string AP = palos_jugador2[A];
-			valores_jugador2[A] = valores[1];
-			palos_jugador2[A] = palos[1];
-			valores[1] = AV;
-			palos[1] = AP;
+//			std::string AV = valores_jugador2[A];
+//			std::string AP = palos_jugador2[A];
+//			valores_jugador2[A] = valores[1];
+//			palos_jugador2[A] = palos[1];
+//			valores[1] = AV;
+//			palos[1] = AP;
+		break;
 		}
 		case 2: {
+			restar_cartas_mazo(valores, palos, tam_mazo, valores_jugador1, palos_jugador1);
+			restar_cartas_mazo(valores, palos, tam_mazo, valores_jugador2, palos_jugador2);
 			std::cout << "A continuacion elige una carta del corral contrario (1-5), esta carta se intercambiara con una del mazo." << std::endl;
-			std::cin >> A;
+			std::cin >> carta_contrario;
 			
-			// Validar la entrada del usuario
-			if (A < 1 || A > 5) {
-				std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
-				return;
+			if(turnoJugador == 2){
+			swap(valores_jugador1[carta_contrario - 1], valores[carta_propia - 1]);
+			swap(palos_jugador1[carta_contrario - 1], palos[carta_propia - 1]);
 			}
-			
-			AV = valores_jugador1[A];
-			AP = palos_jugador1[A];
-			valores_jugador1[A] = valores[1];
-			palos_jugador1[A] = palos[1];
-			valores[1] = AV;
-			palos[1] = AP;
+//			AV = valores_jugador1[A];
+//			AP = palos_jugador1[A];
+//			valores_jugador1[A] = valores[1];
+//			palos_jugador1[A] = palos[1];
+//			valores[1] = AV;
+//			palos[1] = AP;
 			break;
 		}
 		
 		case 3:
-			// Elegir una carta propia e intercambiarla con una del corral contrario
 		{
-			
+			// Elegir una carta propia e intercambiarla con una del corral contrario
+			{
+			int carta_propia, carta_contrario;
 			std::cout << "Elige una carta de tu propio corral (1-5): ";
 			std::cin >> carta_propia;
-			
-			// Validar la entrada del usuario
-			if (carta_propia < 1 || carta_propia > 5) {
-				std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
-				return;
-			}
 			
 			std::cout << "Elige una carta del corral contrario (1-5): ";
 			std::cin >> carta_contrario;
 			
-			// Validar la entrada del usuario
-			if (carta_contrario < 1 || carta_contrario > 5) {
-				std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
-				return;
+			// Intercambiar las cartas
+			if(turnoJugador == 2){
+				swap(valores_jugador2[carta_propia - 1], valores_jugador1[carta_contrario - 1]);
+				swap(palos_jugador2[carta_propia - 1], palos_jugador1[carta_contrario - 1]);
+			}
+			else{
+				swap(valores_jugador1[carta_propia - 1], valores_jugador2[carta_contrario - 1]);
+				swap(palos_jugador1[carta_propia - 1], palos_jugador2[carta_contrario - 1]);
 			}
 			
-			// Intercambiar las cartas
-			std::swap(valores_propios[carta_propia - 1], valores_contrario[carta_contrario - 1]);
+		}
+		break;
+		}
+		
+		case 4: {
+			cout << "A continuacion elige una carta de tu propio corral (1-5), acto seguido elige otra carta de tu propio corral (1-5) y estas se intercambiaran." << endl;
+			cout << "Ingrese la primer carta: ";
+			cin >> carta_propia;
+			cout << endl;
+			cout << "Ingrese la segunda carta: ";
+			cin >> carta_propia2;
+			cout << endl;
+			// Validar la entrada del usuario
+			swap(valores_jugador1[carta_propia - 1], valores_jugador1[carta_propia2 - 1]);
+			swap(palos_jugador1[carta_propia - 1], palos_jugador1[carta_propia2 - 1]);	
 		}
 		break;
 		
-		case 4: {
-			std::cout << "A continuacion elige una carta de tu propio corral (1-5), acto seguido elige otra carta de tu propio corral (1-5) y estas se intercambiaran" << std::endl;
-			cin >> A;
-			// Validar la entrada del usuario
-			if (A < 1 || A > 5) {
-				std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
-				return;
-			}
-			cin >> B;
-			// Validar la entrada del usuario
-			if (B < 1 || B > 5) {
-				std::cout << "Entrada inválida. Debes elegir un número entre 1 y 5." << std::endl;
-				return;
-			}
-			AV = valores_jugador1[A];
-			AP = palos_jugador1[A];
-			valores_jugador2[A] = valores_jugador2[B];
-			palos_jugador2[A] = palos_jugador2[B];
-			valores_jugador2[B] = AV;
-			palos_jugador2[B] = AP;
-		}
 		case 5:
-			printf("A continuacion elige una carta de tu corral, esta carta estara BLOQUEADA y no puede ser elegida por el contrario para intercambiar pero si por ti mismo");
-			break;
+			cout << "A continuacion elige una carta de tu corral" << endl;
+			cin >> carta_propia;
+			cout << "Esta carta estara BLOQUEADA y no puede ser elegida por el contrario para intercambiar pero si por ti mismo" << endl;
+		break;
 			
 		case 6:
-			printf("Puedes elegir cualquier accion anterior o pasar turno");
+			cout << "Puedes elegir cualquier accion anterior o pasar turno con el 6" << endl;
+			cin >> opcion;
+			switch (opcion) {
+			case 1: {
+				std::cout << "A continuacion elige una carta de tu propio corral (1-5), esta carta se intercambiara con una del mazo." << std::endl;
+				std::cin >> carta_propia;
+				
+				if(turnoJugador == 2){
+					swap(valores_jugador2[carta_propia - 1], valores[1]);
+					swap(palos_jugador2[carta_propia - 1], palos[1]);
+				}
+				//			std::string AV = valores_jugador2[A];
+				//			std::string AP = palos_jugador2[A];
+				//			valores_jugador2[A] = valores[1];
+				//			palos_jugador2[A] = palos[1];
+				//			valores[1] = AV;
+				//			palos[1] = AP;
+				break;
+			}
+			case 2: {
+				std::cout << "A continuacion elige una carta del corral contrario (1-5), esta carta se intercambiara con una del mazo." << std::endl;
+				std::cin >> carta_contrario;
+				
+				if(turnoJugador == 2){
+					swap(valores_jugador1[carta_contrario - 1], valores[1]);
+					swap(palos_jugador1[carta_contrario - 1], palos[1]);
+				}
+				//			AV = valores_jugador1[A];
+				//			AP = palos_jugador1[A];
+				//			valores_jugador1[A] = valores[1];
+				//			palos_jugador1[A] = palos[1];
+				//			valores[1] = AV;
+				//			palos[1] = AP;
+				break;
+			}
+			
+			case 3:
+			{
+				// Elegir una carta propia e intercambiarla con una del corral contrario
+				{
+				int carta_propia, carta_contrario;
+				std::cout << "Elige una carta de tu propio corral (1-5): ";
+				std::cin >> carta_propia;
+				
+				std::cout << "Elige una carta del corral contrario (1-5): ";
+				std::cin >> carta_contrario;
+				
+				// Intercambiar las cartas
+				if(turnoJugador == 2){
+					swap(valores_jugador2[carta_propia - 1], valores_jugador1[carta_contrario - 1]);
+					swap(palos_jugador2[carta_propia - 1], palos_jugador1[carta_contrario - 1]);
+				}
+				else{
+					swap(valores_jugador1[carta_propia - 1], valores_jugador2[carta_contrario - 1]);
+					swap(palos_jugador1[carta_propia - 1], palos_jugador2[carta_contrario - 1]);
+				}
+				
+			}
 			break;
-			// MODIFICAR EL 6 CON OTRO SWITCH INSERTANDO LOS 5 ANTERIORES Y OTRA OPCION PARA SALTEAR
+			}
+			
+			case 4: {
+				cout << "A continuacion elige una carta de tu propio corral (1-5), acto seguido elige otra carta de tu propio corral (1-5) y estas se intercambiaran." << endl;
+				cout << "Ingrese la primer carta: ";
+				cin >> carta_propia;
+				cout << endl;
+				cout << "Ingrese la segunda carta: ";
+				cin >> carta_propia2;
+				cout << endl;
+				// Validar la entrada del usuario
+				swap(valores_jugador1[carta_propia - 1], valores_jugador1[carta_propia2 - 1]);
+				swap(palos_jugador1[carta_propia - 1], palos_jugador1[carta_propia2 - 1]);	
+			}
+			break;
+			
+			case 5: {
+				cout << "A continuacion elige una carta de tu corral" << endl;
+				cin >> carta_propia;
+				cout << "Esta carta estara BLOQUEADA y no puede ser elegida por el contrario para intercambiar pero si por ti mismo" << endl;
+				break;
+			}
+			
+			case 6:
+				// Salir del bucle si elige pasar turno
+				std::cout << "Pasando turno..." << std::endl;
+				break;
+				
+			}
 		}
 	}
+
 }
-
-
-//void cambiar_jugador(){
-//	bool jugador1Comienza = false;
-//	bool jugador2Comienza = false;
-//	
-//	if (jugador1Comienza && !jugador2Comienza) {
-//		!jugador1Comienza;
-//		jugador2Comienza;
-//	} else {
-//		jugador1Comienza;
-//		!jugador2Comienza;
-//	}
-//}
-
-	
-	
-
