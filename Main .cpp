@@ -42,15 +42,15 @@ int main() {
 		case 1:
 			juego(); 
 			break;
-		
+			
 		case 2:
 			estadisticas();
-		break;
-		
+			break;
+			
 		case 3: 
 			creditos();
 			break;
-		
+			
 		default: break;
 		}
 		
@@ -83,3 +83,4 @@ int main() {
 	
 	return 0;
 }
+
