@@ -12,236 +12,90 @@ using namespace std;
 // Opcion 1 = JUGAR
 void juego(){
 	
-	
-	
-	string player1, player2;
-	
-	const int tam_mazo = 20;
-	
-	const int CARTAS_POR_JUGADOR = 5;
-	
-	const string cartas_a_comparar[] = {"A", "K", "Q", "J", "10"};
-	
-	string valores[tam_mazo], palos[tam_mazo];
-	// Vectores para almacenar las cartas de cada jugador
-	string valores_jugador1[CARTAS_POR_JUGADOR];
-	
-	string palos_jugador1[CARTAS_POR_JUGADOR];
-	
-	string valores_jugador2[CARTAS_POR_JUGADOR];
-	
-	string palos_jugador2[CARTAS_POR_JUGADOR];
-	
-	//char cartasPlayer1[5], cartasPlayer2[5];
-	
-	int ronda = 1; // Comenzar en la ronda 1
-	
-	int turnoJugador; // Variable para controlar el turno del jugador
-	
-	bool jugador1Comienza = false; // Declaradas aca para que sean visibles en todo el ámbito del switch
-	
-	bool jugador2Comienza = false;
-	
-	
-	
-	srand(time(0));
-	system("color 3f");
-	
-	rlutil::cls();
-	rlutil::locate(50, 8);
-	cout << "CLUTCH" << endl;
-	cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
-	rlutil::locate(40, 10);
-	cout << "Antes de comenzar deben registrar sus nombres:" << endl;
-	ingresarNombres(player1, player2);
-	if (confirmarNombres(player1, player2)) {
-		rlutil::locate(50, 18);
-		cout << "Nombres confirmados." << endl;
-	} else {
-		rlutil::locate(45, 17);
-		cout << "Vuelve a ingresar los nombres." << endl << endl;
-	}
-	
-	
-	// Llenar los vectores con cartas aleatorias para ambos jugadores
-	for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
-		string palo;
-		string valor;
+		srand(time(0));
 		
-		// Cartas para el jugador 1
-		informar_carta(valor, palo);
-		valores_jugador1[i] = valor;
-		palos_jugador1[i] = palo;
+		string valores[] = {"10", "J", "Q", "K", "A"};
+		string palos[] = {"Corazon", "Pica", "Diamante", "Trebol"};
+		string mazo[5][4];
+		string jugador1[5], jugador2[5];
+		string player1, player2;
+		int ronda = 1;
+		int turnoJugador;
 		
-		// Cartas para el jugador 2
-		informar_carta(valor, palo);
-		valores_jugador2[i] = valor;
-		palos_jugador2[i] = palo;
-	}
-	
-	// Verificar si las cartas están en orden y barajar nuevamente si es necesario
-	if (cartas_en_orden(valores_jugador1)) {
-		cout << "Las cartas del Jugador 1 salieron ordenadas. Barajar nuevamente...\n";
-		barajar_cartas(valores_jugador1, palos_jugador1, CARTAS_POR_JUGADOR);
-	}
-	
-	if (cartas_en_orden(valores_jugador2)) {
-		cout << "Las cartas del Jugador 2 salieron ordenadas. Barajar nuevamente...\n";
-		barajar_cartas(valores_jugador2, palos_jugador2, CARTAS_POR_JUGADOR);
-	}
-	
-	
-	
-	for (const string &carta : cartas_a_comparar) {
-		int resultado = comparar_cartas(valores_jugador1, valores_jugador2, carta);
-		cout <<endl<<endl<<endl;
-		if (resultado == 1) {
-			rlutil::locate(50, 23);
-			cout << " Comienza :" << player1 << endl<< endl;
-			jugador1Comienza = true;
-			turnoJugador = 1;
-			break;
-		} else if (resultado == -1) {
-			rlutil::locate(50, 23); 
-			cout <<" Comienza :"  << player2 << endl;
-			jugador2Comienza = true;
-			turnoJugador = 2;
-			break;
-		}
-	}
-
-	
-	do {
 		rlutil::cls();
 		
-		mostrar_ronda(ronda);
-		
-		// Establecer el turno del jugador al comienzo de cada ronda
-		if (ronda % 2 == 1) {
-			turnoJugador = 1;
-			rlutil::locate(50, 23); 
-			cout <<" TURNO DE :"  << player1 << endl;
+		rlutil::locate(50, 8);
+		cout << "CLUTCH" << endl;
+		cout << "------------------------------------------------------------------------------------------------------------------------" << endl;
+		rlutil::locate(40, 10);
+		cout << "Antes de comenzar deben registrar sus nombres:" << endl;
+		ingresarNombres(player1, player2);
+		if (confirmarNombres(player1, player2)) {
+			
+			rlutil::locate(50, 18);
+			cout << "Nombres confirmados." << endl;
+			
 		} else {
-			turnoJugador = 2;
-			rlutil::locate(50, 23); 
-			cout <<" TURNO DE :"  << player2 << endl;
+			rlutil::locate(45, 17);
+			cout << "Vuelve a ingresar los nombres." << endl << endl;
 		}
-				
-		rlutil::locate(48, 3);
-		cout  << player1 << endl<< endl;
-		cout<< "------------------------------------------------------------------------------------------------------------------------";
-		for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
-			cout << setw(50)  << valores_jugador1[i] << " "  << palos_jugador1[i] << endl;
-			
-		}
-		cout << endl << endl << endl;
-		cout<< "------------------------------------------------------------------------------------------------------------------------";
-		rlutil::locate(48, 15);
-		cout <<  player2 << endl<< endl;
+		// Funciones para crear el mazo, barajarlo y luego repartir a los dos jugadores
+		inicializarMazo(mazo, valores, palos);
+		barajarMazo(mazo);
+		repartirCartas(mazo, jugador1, jugador2);
 		
-		for (int i = 0; i < CARTAS_POR_JUGADOR; i++) {
-			cout << setw(50) << valores_jugador2[i] << " " << palos_jugador2[i] << endl;
+		if (cartas_en_orden(jugador1, 5) || cartas_en_orden(jugador2, 5)) {
+			cout << "¡Las cartas de un jugador salieron ordenadas! Volviendo a repartir..." << endl << endl;
+			barajarMazo(mazo);
+			repartirCartas(mazo, jugador1, jugador2);
 		}
 		
-		if (jugador1Comienza || jugador2Comienza) {
-			const int tam = 6;
-			int dado = tirardados(tam);
-			rlutil::locate(48,25);
-			cout << "LANZAMIENTO DE DADO #" << dado << endl;
-			cout << endl;
-			cambiar_ronda(ronda);
-			accion_dado(dado, turnoJugador, valores, palos, valores_jugador1, valores_jugador2, palos_jugador1, palos_jugador2);
-		}
-		
-		
-		cout<< "------------------------------------------------------------------------------------------------------------------------" << endl;
-		
-		rlutil::locate(48,27);
-		
-		cout << " Presione enter para tirar dados " << endl;
-		
-		cin.ignore();
-		cin.get();
-		rlutil::cls();
-		
-		if (!cartas_en_orden(valores_jugador1) || !cartas_en_orden(valores_jugador2)) {
-			
+		do{
+			rlutil::cls();
+			barajarMazo(mazo);
+			//Funcion de ronda de la partida
 			mostrar_ronda(ronda);
-			cout << endl;
-		}
+			
+			// Establecer el turno del jugador al comienzo de cada ronda
+			if (ronda % 2 == 1) {
+				turnoJugador = 1;
+				rlutil::locate(50, 23); 
+				cout <<" TURNO DE :"  << player1 << endl;
+			} else {
+				turnoJugador = 2;
+				rlutil::locate(50, 23); 
+				cout <<" TURNO DE :"  << player2 << endl;
+			}
+			// Funciones que muestran las cartas de los jugadores
+			mostrarCartasJ1(jugador1, player1, 5);
+			cout << endl << endl << endl;
+			cout<< "------------------------------------------------------------------------------------------------------------------------";
+			mostrarCartasJ2(jugador2, player2, 5);
+			
+			//Indica el dado que sale y muestra la accion del mismo, luego pasa al siguiente turno.
+			if (turnoJugador == 1 || turnoJugador == 2) {
+				const int tam = 6;
+				int dado = tirardados(tam);
+				rlutil::locate(48,25);
+				cout << "LANZAMIENTO DE DADO #" << dado << endl;
+				cout << endl;
+				cambiar_ronda(ronda);
+				accion_dado(dado, turnoJugador, mazo, jugador1, jugador2);
+			}
+			
+			
+			cout<< "------------------------------------------------------------------------------------------------------------------------" << endl;
+			
+			rlutil::locate(48,27);
+			
+			cout << " Presione enter para tirar dados " << endl;
+			
+			cin.ignore();
+			cin.get();
+			rlutil::cls();
+			
+		} while(cartas_en_orden(jugador1, 5) != true || cartas_en_orden(jugador2, 5) != true); 
 		
 		
-	} while (!cartas_en_orden(valores_jugador1) || !cartas_en_orden(valores_jugador2));
-
-	int resultado_final = comparar_cartas(valores_jugador1, valores_jugador2, cartas_a_comparar[0]);
-	
-	if (resultado_final == 1) {
-		cout << "¡El jugador " << player1 << " gana la partida!" << endl;
-	} else {
-		cout << "¡El jugador " << player2 << " gana la partida!" << endl;
-	}
-}
-
-//Opcion 2 - Estadisticas
-	
-void estadisticas(){
-	
-	int puntos_partida = 0, puntos_robo = 0, puntos_Malubicadas = 0, puntos_Sinturno = 0, puntos_Sinrobo = 0;
-	
-	rlutil::cls();
-	rlutil::locate(45, 8);
-	cout << "ESTADISTICAS" << endl; 
-	rlutil::locate(45, 9);
-	cout << "---------------------------------------------------------------------- " << endl;
-	rlutil::locate(45, 10);
-	cout << "DETALLE" << endl;
-	rlutil::locate(100, 10);
-	cout << "PUNTOS" << endl; 
-	rlutil::locate(45, 11);
-	cout << "---------------------------------------------------------------------- " << endl;
-	rlutil::locate(45, 12);
-	cout << "Ganar la partida" << endl;
-	rlutil::locate(100, 12);
-	cout << puntos_partida << "puntos." << endl;
-	rlutil::locate(45, 13);
-	cout << "Robo última carta al jugador rival" << endl;
-	rlutil::locate(100, 13);
-	cout << puntos_robo << "puntos." << endl;
-	rlutil::locate(45, 14);
-	cout << "Cartas mal ubicadas del rival x 4" << endl;
-	rlutil::locate(100, 14);
-	cout << puntos_Malubicadas << "puntos." << endl;
-	rlutil::locate(45, 15);
-	cout << "Sin pasar de turno" << endl;
-	rlutil::locate(100, 15);
-	cout << puntos_Sinturno << "puntos." << endl;
-	rlutil::locate(45, 16);
-	cout << "Sin haber sufrido un robo del rival " << endl;
-	rlutil::locate(100, 16);
-	cout << puntos_Sinrobo << "puntos." << endl;
-	rlutil::locate(45, 17);
-	cout << "---------------------------------------------------------------------- " << endl;
-	rlutil::locate(45, 18);
-	cout << "TOTAL" << endl;
-
-}
-
-// Opcion 3 - CREDITOS	
-void creditos(){
-	
-	rlutil::cls();
-	rlutil::locate(45, 8);
-	cout << "CREDITOS" << endl; 
-	rlutil::locate(45, 9);
-	cout << " ------------------------------------ " << endl;
-	rlutil::locate(45, 10);
-	cout << "Laboratorio de Computación I - Grupo 64" << endl;
-	rlutil::locate(45, 11);
-	cout << "Integrantes: " << endl;
-	rlutil::locate(45, 13);
-	cout << "Legajo 27990 - Rossi, Santiago Rodrigo" << endl;
-	rlutil::locate(45, 14);
-	cout << "Legajo 27975 - Diaz, Leonardo Sebastián" << endl;
-	rlutil::locate(45, 15);
-	cout << "Legajo 27982 - Aguirregabiria, Martin Alejandro" << endl;
+				
 }
